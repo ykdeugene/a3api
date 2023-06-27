@@ -1,0 +1,70 @@
+# runs when rel_* branch is created
+# 1. runs the build.sh
+# 2. in build, move src to build_server (secured copy)
+# 3. load the node_module tarball to the server
+# 4. docker build & pass the branch name to the dockerbuild command to be the image name
+# 5. docker save to extract the application image
+# 6. copy deploy/config folder (source package) to the build server
+# 7.
+
+# assumptions:
+# - database is always running
+# -
+
+# notes:
+# build.sh needs to take care the scenario where dockerfile fails package.json comparison
+###################################################################################################
+
+stages:
+  - build # triggered from rel_* (automated)
+  - transfer_dvd # add manual triggers to see if fail/pass
+  - deploy_test # add manual triggers to see if fail/pass
+  - rebase_main # (automated)
+
+# variables:
+#   Define any environment-specific variables here
+#   ENVIRONMENT_NAME: staging
+
+# before_script:
+#   Define any pre-build commands or setup steps here
+
+build_job:
+  stage: build
+  script:
+    - "cd build"
+    - "export branch_name=$CI_COMMIT_REF_NAME"
+    - "./build.sh"
+  rules:
+    - if: "$CI_COMMIT_REF_NAME =~ /^rel_/"
+
+transfer_dvd_job:
+  stage: transfer_dvd
+  script:
+    - "echo 'hello world'"
+
+deploy_test_job:
+  stage: deploy_test
+  script:
+    - "echo 'hello world'"
+
+rebase_main_job:
+  stage: rebase_main
+  script:
+    - "echo 'hello world'"
+
+  # deploy_test:
+  # think from a DVD POV (TRANSFER)
+  # secure copy to the Hoo's Laptop
+  # MD5 checksum??
+  # untar the release package
+  # docker load
+  # check if existing image if it is running, if so - docker 'stop'
+  # docker run the latest version with the respective env file (test_server.env)
+  # run tests (using curl commands to hit the 3 APIs)
+  # if the testing pass then rebase the main using git push
+
+  # stage: deploy_test
+  # script:
+  # - "cd deploy"
+  # -"./deploy.sh"
+  # Define additional stages or jobs as needed

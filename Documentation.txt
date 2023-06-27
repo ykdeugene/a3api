@@ -1,0 +1,31 @@
+POST http://localhost:2424/GetTaskbyState
+{
+    "Username": "nogroup",
+    "Password": "test!1234",
+    "Task_app_Acronym": "BirdPark",
+    "Task_state": "Closed"
+}
+
+====================================
+
+POST http://localhost:2424/CreateTask
+
+{
+    "Username": "dev",
+    "Password": "test!1234",
+    "Task_app_Acronym": "Zoo",
+    "Task_plan": "Sprint 2",
+    "Task_name": "TaskName",
+    "Task_description": "This task is created from the A3-API"
+}
+
+====================================
+
+POST http://localhost:2424/PromoteTask2Done
+
+{
+    "Username": "admin",
+    "Password": "test!1234",
+    "Task_id": "Zoo_69",
+    "Task_notes": "checknotes"
+}
